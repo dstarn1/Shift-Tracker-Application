@@ -1,9 +1,6 @@
 package project;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
@@ -65,10 +62,8 @@ public class Shift {
         String lineA = "";
         String lineB;
 
-        for (int i = 0; i <= getNumShiftsPerWeek() - 1; i++) {
-            //for (int j=1; j <= 7; j++) {
-            //if (dayOfWeekIntArr[i] == j) { //convertDayOfWeek(dayOfWeek)
-            lineB = shiftStartTimeArr[i] + "-" + shiftEndTimeArr[i] + "\t\t\t"; //convertDayOfWeek(j) + " " +
+        for (int i = 0; i < getNumShiftsPerWeek(); i++) {
+            lineB = shiftStartTimeArr[i] + "-" + shiftEndTimeArr[i] + "\t\t\t";
             lineA = lineA + lineB;
         }
         return lineA;
@@ -86,7 +81,7 @@ public class Shift {
         return "";
     }
 
-    public String calendarOutput(int[] dayOfWeekIntArr, int[] shiftStartTimeArr, int[] shiftLengthArr, int[] shiftEndTimeArr) {
+    public String fileOutput(int[] dayOfWeekIntArr, int[] shiftStartTimeArr, int[] shiftLengthArr, int[] shiftEndTimeArr) {
         Scanner scanner = new Scanner(System.in);
 
         String filePath;
@@ -105,19 +100,26 @@ public class Shift {
             File file = new File(filePath);
 
             try (PrintWriter dataOutput = new PrintWriter(file)) {
+
+                PrintStream originalStream = System.out; // Bind original output stream, console, to variable so we can reassign
+
                 System.setOut(new PrintStream(file));
+
                 dataOutput.println(consolePrint(dayOfWeekIntArr, shiftStartTimeArr, shiftLengthArr, shiftEndTimeArr));
 
-//                System.setOut(new PrintStream(out));
-//                System.out.println("Weekly shift table has been written to designated path.");
+                System.setOut(originalStream); // Rebind to console for output to user.
+
+                System.out.println("Weekly shift table has been written to designated path!");
 
             } catch (FileNotFoundException e) {
                 System.err.println("File does not exist.");
             }
         } else {
-            System.setOut(System.out);
+            // System.setOut(System.out);
+            System.out.println("Thanks for using the program, exiting now..");
             System.exit(1);
         }
+
         return out;
     }
 }

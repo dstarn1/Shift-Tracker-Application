@@ -1,4 +1,5 @@
 package project;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -35,13 +36,13 @@ public class Application {
             shift.setNumShiftsPerWeek(Integer.parseInt(scanner.nextLine()));
 
             shiftNum = shift.getNumShiftsPerWeek();
-            dayOfWeekArr = new String [shiftNum];
-            dayOfWeekIntArr = new int [shiftNum];
-            shiftStartTimeArr = new int [shiftNum];
-            shiftEndTimeArr = new int [shiftNum];
-            shiftLengthArr = new int [shiftNum];
+            dayOfWeekArr = new String[shiftNum];
+            dayOfWeekIntArr = new int[shiftNum];
+            shiftStartTimeArr = new int[shiftNum];
+            shiftEndTimeArr = new int[shiftNum];
+            shiftLengthArr = new int[shiftNum];
 
-            if (shift.getNumShiftsPerWeek() == 0) {
+            if (shiftNum == 0) {
                 System.out.println("Have a fun, relaxing week!");
                 System.exit(0);
             }
@@ -65,12 +66,11 @@ public class Application {
                 }
                 // dayOfWeek is int, passed to setDayOfWeek and a string is returned
 
-
                 System.out.println();
 
                 System.out.println("Enter the starting time for your shift using 24 hour format.");
                 int startTimeInput = Integer.parseInt(scanner.nextLine());
-                // no setter for shiftStart time because setters are void, can't be passed into array
+
                 shiftStartTimeArr[i] = startTimeInput;
 
                 System.out.println();
@@ -84,39 +84,36 @@ public class Application {
                 i++;
 
             }
-            while (i <= shift.getNumShiftsPerWeek() - 1);
+            while (i < shiftNum);
 
             // Generate shiftEndTime array
             shift.makeShiftEndTimeArray(shiftEndTimeArr, shiftStartTimeArr, shiftLengthArr);
         } catch (NumberFormatException e) {
             System.out.println("Oops, you entered a non-numerical value.");
         }
-    // shift.consolePrint(dayOfWeekIntArr, shiftStartTimeArr, shiftLengthArr, shiftEndTimeArr);
+        // shift.consolePrint(dayOfWeekIntArr, shiftStartTimeArr, shiftLengthArr, shiftEndTimeArr);
         System.out.println(Arrays.toString(shiftStartTimeArr));
         System.out.println(Arrays.toString(shiftEndTimeArr));
 
-        final Object[][] table = new Integer[2][shiftNum]; // 2 rows , shifts-1 columns
+        final Object[][] table = new Integer[2][shiftNum]; // 2 rows , [shiftNum] columns
 
         for (int i = 0; i < shiftNum; i++) {
             table[0][i] = shiftStartTimeArr[i];
         }
 
         for (int i = 0; i < shiftNum; i++) {
-            table[1][i] = shiftEndTimeArr[i]; // row, col
+            table[1][i] = shiftEndTimeArr[i];
         }
 
         System.out.println("Monday\t\tTuesday\t\tWednesday\t\tThursday\t\tFriday\t\tSaturday\t\tSunday");
         System.out.println();
-        String element = "%d";
+        String element = "";
         String total;
 
         for (final Object[] row : table) {
-                total = element + " %d";
-                System.out.format(total + "\n", row);
-         }
-
-    shift.calendarOutput(dayOfWeekIntArr, shiftStartTimeArr, shiftLengthArr, shiftEndTimeArr);
-
-
+            total = element + " %d";
+            System.out.format(total + "\n", row); //TODO  if shiftNum is one, format exception error, if shiftNum = 3, spits out 2 rows 2 columns
+        }
+        shift.fileOutput(dayOfWeekIntArr, shiftStartTimeArr, shiftLengthArr, shiftEndTimeArr);
     }
 }
